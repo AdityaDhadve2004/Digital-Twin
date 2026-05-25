@@ -1,0 +1,16 @@
+{
+  "name": "digitaltwinbackend",
+  "version": "1.0.0",
+  "description": "digital twin app",
+  "keywords": [
+    "node",
+    "digital"
+  ],
+  "license": "ISC",
+  "author": "aditya",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev" : "node src/index.js"
+  }
+}
