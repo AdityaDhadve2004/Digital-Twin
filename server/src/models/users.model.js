@@ -24,7 +24,7 @@ export const createUser = async(username,email,password) => {
 }
 export const findUserByEmail = async(email) => {
     const res = await pool.query(
-        `SELECT id,name,email,created_at FROM users WHERE email=$1`,
+        `SELECT * FROM users WHERE email=$1`,
         [email]
     )
 

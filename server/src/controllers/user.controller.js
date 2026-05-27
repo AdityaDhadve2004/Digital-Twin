@@ -1,9 +1,10 @@
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js"
 import { HashPassword } from "../utils/HashPassword.js";
-
+import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens.js";
 import { findUserById, checkExistedUser, createUser, findUserByEmail } from "../models/users.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
+import { setRefreshToken } from "../models/token.model.js";
 
 
 const generateAccessAndRefreshTokens = async (userId) => {
@@ -12,13 +13,16 @@ const generateAccessAndRefreshTokens = async (userId) => {
         if (!user) {
             throw new ApiError(404, "User not found")
         }
-        const refreshToken = generateRefreshToken(user.id,user.name)
-        const accessToken = generateAccessToken(user.id,user.name)
+        const refreshToken = generateRefreshToken(user.id, user.name)
+        const accessToken = generateAccessToken(user.id, user.name)
+        const token = await setRefreshToken(user.id, refreshToken)
+        if (!token) {
+            throw new ApiError(500, "Something went wrong while setting the token")
+        }
         return { accessToken, refreshToken }
     } catch (error) {
         console.log("TOKEN ERROR:", error)
         throw new ApiError(500, error.message)
-
     }
 }
 
@@ -70,6 +74,28 @@ const loginUser = AsyncHandler(
         }
 
         const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user.id);
+
+        const loggedInUser = await findUserById(user.id)
+
+        const options = {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none"
+        }
+
+        return res
+            .status(200)
+            .cookie("accessToken", accessToken, options)
+            .cookie("refreshToken", refreshToken, options)
+            .json(
+                new ApiResponse(
+                    200,
+                    {
+                        user: loggedInUser, accessToken, refreshToken
+                    },
+                    "User logged In Successfully"
+                )
+            )
 
     }
 )
