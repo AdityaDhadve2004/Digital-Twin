@@ -1,0 +1,75 @@
+import { AsyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js"
+import { HashPassword } from "../utils/HashPassword.js";
+
+import { findUserById, checkExistedUser, createUser, findUserByEmail } from "../models/users.model.js"
+import { ApiResponse } from "../utils/ApiResponse.js";
+
+
+const generateAccessAndRefreshTokens = async (userId) => {
+    try {
+        const user = await findUserById(userId)
+        if (!user) {
+            throw new ApiError(404, "User not found")
+        }
+        const refreshToken = generateRefreshToken(user.id,user.name)
+        const accessToken = generateAccessToken(user.id,user.name)
+        return { accessToken, refreshToken }
+    } catch (error) {
+        console.log("TOKEN ERROR:", error)
+        throw new ApiError(500, error.message)
+
+    }
+}
+
+const registerUser = AsyncHandler(
+    async (req, res) => {
+        const { username, email, password } = req.body
+
+        if (!username || !email || !password) {
+            throw new ApiError(400, "All fields are required")
+        }
+
+        const existedUser = await checkExistedUser(username, email);
+
+        if (existedUser) {
+            throw new ApiError(409, "User already exists")
+        }
+
+        const hashedPassword = await HashPassword(password)
+
+        const user = createUser(username, email, hashedPassword);
+
+        const registeredUser = await findUserById(user.id)
+
+        if (!registeredUser) {
+            throw new ApiError(500, "Something went wrong while registering the user")
+        }
+
+        return res.status(201).json(
+            new ApiResponse(201, registeredUser, "User registered Successfully")
+        )
+
+    }
+)
+
+const loginUser = AsyncHandler(
+    async (req, res) => {
+        const { email, password } = req.body;
+
+        const user = await findUserByEmail(email);
+
+        if (!user) {
+            throw new ApiError(404, "User does not exist")
+        }
+
+        const isPasswordCorrect = await isPasswordCorrect(password, user.password);
+
+        if (!isPasswordCorrect) {
+            throw new ApiError(401, "Invalid user credentials")
+        }
+
+        const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user.id);
+
+    }
+)
