@@ -5,6 +5,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
 import { findUserById, checkExistedUser, createUser, findUserByEmail } from "../models/users.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { setRefreshToken } from "../models/token.model.js";
+import { comparePassword } from "../utils/isPasswordCorrect.js"
 
 
 const generateAccessAndRefreshTokens = async (userId) => {
@@ -42,7 +43,7 @@ const registerUser = AsyncHandler(
 
         const hashedPassword = await HashPassword(password)
 
-        const user = createUser(username, email, hashedPassword);
+        const user = await createUser(username, email, hashedPassword);
 
         const registeredUser = await findUserById(user.id)
 
@@ -67,7 +68,7 @@ const loginUser = AsyncHandler(
             throw new ApiError(404, "User does not exist")
         }
 
-        const isPasswordCorrect = await isPasswordCorrect(password, user.password);
+        const isPasswordCorrect = await comparePassword(password, user.password);
 
         if (!isPasswordCorrect) {
             throw new ApiError(401, "Invalid user credentials")
@@ -96,6 +97,25 @@ const loginUser = AsyncHandler(
                     "User logged In Successfully"
                 )
             )
+
+    }
+)
+
+const logoutUser = AsyncHandler(
+    async (req, res) => {
+        const deleteToken = await clearRefreshToken(req.user.id);
+
+        const options = {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax"
+        }
+
+        return res
+            .status(200)
+            .clearCookie("accessToken", options)
+            .clearCookie("refreshToken", options)
+            .json(new ApiResponse(200, {}, "User logged Out"))
 
     }
 )
