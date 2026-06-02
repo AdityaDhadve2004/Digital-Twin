@@ -27,6 +27,16 @@ const generateAccessAndRefreshTokens = async (userId) => {
     }
 }
 
+
+const getCurrentUser = AsyncHandler(
+    async (req,res) => {
+        return res
+            .status(200)
+            .json(
+                new ApiResponse(200, req?.user , "User fetched successfully")
+            ) 
+    }
+)
 const registerUser = AsyncHandler(
     async (req, res) => {
         const { username, email, password } = req.body
@@ -119,3 +129,5 @@ const logoutUser = AsyncHandler(
 
     }
 )
+
+export { getCurrentUser,registerUser,loginUser,logoutUser }

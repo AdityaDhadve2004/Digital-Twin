@@ -1,4 +1,4 @@
-import { pool } from "../db/connect"
+import { pool } from "../db/connect.js"
 export const setRefreshToken = async (ownerId, token) => {
     const res = await pool.query(
         `

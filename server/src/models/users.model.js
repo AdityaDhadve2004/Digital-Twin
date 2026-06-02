@@ -1,4 +1,4 @@
-import { pool } from "../db/connect"
+import { pool } from "../db/connect.js"
 export const findUserById = async(id) => {
     const res = await pool.query(
         `SELECT id,name,email,created_at FROM users WHERE id=$1`,
