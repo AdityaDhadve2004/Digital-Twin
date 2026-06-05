@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Form } from "react-router-dom";
 import MainLogo from "../assets/Untitled.jpg"
+import { useActionData,redirect } from "react-router-dom";
+import { createUser } from "../api";
 import React from "react";
 import { Mail, Lock, ArrowRight, User } from "lucide-react";
 
@@ -10,10 +12,16 @@ export async function actionSignup({ request }){
   console.log(formData);
   const jsonData = Object.fromEntries(formData);
   console.log(jsonData);
+  const res = await createUser(jsonData);
+  if (res) {
+    return redirect("/login");  
+  }
 }
 
 
 export default function SignupPage() {
+  const data = useActionData();
+  console.log(data);
   return (
     <div className="min-h-screen bg-[#f5f4f2] flex flex-col items-center justify-center px-4">
       {/* Header */}

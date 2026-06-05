@@ -3,15 +3,21 @@ import { Form } from "react-router-dom";
 import MainLogo from "../assets/Untitled.jpg"
 import React from "react";
 import { Mail, Lock, ArrowRight } from "lucide-react";
-
+import { loginUser } from "../api";
+import { useActionData,redirect } from "react-router-dom";
 export async function actionLogin({ request }){
   const formData = await request.formData()
   console.log(formData);
   const jsonData = Object.fromEntries(formData);
-  console.log(jsonData);
+  const res = await loginUser(jsonData); 
+  if (res) {
+    return redirect("/dashboard");  
+  }
 }
 
 export default function Login() {
+  const data = useActionData();
+  console.log(data);
 
   return (
     <div className="min-h-screen bg-[#f7f6f4] flex flex-col items-center justify-center px-4">

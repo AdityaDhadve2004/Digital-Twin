@@ -15,8 +15,8 @@ export const checkExistedUser = async(username,email) => {
 }
 export const createUser = async(username,email,password) => {
     const res = await pool.query(
-        `INSERT INTO users (id,name,email,password,created_at)
-         VALUES(uuid_generate_v4(),$1,$2,$3,) RETURNING *`,
+        `INSERT INTO users (id,name,email,password)
+         VALUES(uuid_generate_v4(),$1,$2,$3) RETURNING * `,
         [username,email,password]
     )
     return res.rows[0];

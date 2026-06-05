@@ -4,10 +4,11 @@ export async function createUser(data) {
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
-        credentials: include
+        body: JSON.stringify(data),
+        credentials: "include"
     })
-    return res
+    const userdata = await res.json();
+    return userdata
 }
 
 export async function loginUser(data) {
@@ -16,10 +17,11 @@ export async function loginUser(data) {
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
-        credentials: include
+        body: JSON.stringify(data),
+        credentials: "include"
     })
-    return res
+    const userdata = await res.json();
+    return userdata
 }
 
 export async function authUser() {
