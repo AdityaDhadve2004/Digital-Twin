@@ -50,3 +50,11 @@ export const updateSubjectModel = async(name,credits,semester,grade,code,subject
     )
     return res.rows[0];
 }
+export const getAllSubjectsBySemModel = async(userId,semester) => {
+    const res = await pool.query(
+        `SELECT * FROM subjects WHERE user_id=$1 AND semester=$2`,
+        [userId,semester]
+    )
+    return res.rows;
+
+}
