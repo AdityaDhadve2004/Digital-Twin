@@ -58,3 +58,4 @@ const getAllSemesterSGPA = AsyncHandler(
     }
 
 )
+export { getSemesterSGPA , getAllSemesterSGPA }

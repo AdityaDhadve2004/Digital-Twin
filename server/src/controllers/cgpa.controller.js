@@ -43,3 +43,4 @@ const getCGPA = AsyncHandler(
         )
     }
 )
+export { getCGPA }
