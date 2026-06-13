@@ -1,7 +1,6 @@
 import { AsyncHandler } from "../utils/AsyncHandler";
-import { calculateCGPA } from "../utils/cgpaCalculator";
 import { getAllSubjectsModel } from "../models/subjects.model";
-import { calculateSGPA } from "../utils/sgpaCalculator.js";
+import { calculateCGPA, calculateSGPA } from "../utils/cgpaCalculator";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 const getCGPA = AsyncHandler(

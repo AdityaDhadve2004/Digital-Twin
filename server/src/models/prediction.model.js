@@ -29,7 +29,7 @@ export const checkIfExamScoreExists = async (userId, subjectId, semester, code) 
         `SELECT * FROM exam_scores WHERE user_id=$1 AND subject_id=$2 AND semester=$3 AND code=$4`,
         [userId, subjectId, semester, code]
     )
-    return res.row[0];
+    return res.rows[0];
 }
 export const updatedExamScores = async (endPrediction,marksObtained,mse2Marks, examScoreId, subjectId, semester) => {
     const res = await pool.query(
@@ -50,7 +50,7 @@ export const updateAnalysis = async (examScoreId, userId, analysis_type, text) =
         `INSERT INTO prediction_analysis (id,exam_score_id, user_id, analysis_type, gemini_analysis)
          VALUES (uuid_generate_v4(),$1, $2, $3, $4)
          ON CONFLICT (exam_score_id, analysis_type) 
-         DO UPDATE SET analysis_type=$3 gemini_analysis = $4, generated_at = NOW()
+         DO UPDATE SET analysis_type=$3, gemini_analysis = $4, generated_at = NOW()
          RETURNING *`,
          [examScoreId, userId,analysis_type, text]
     )

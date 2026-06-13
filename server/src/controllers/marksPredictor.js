@@ -1,5 +1,5 @@
 import { AsyncHandler } from "../utils/asyncHandler";
-import { findExamScoreById, createExamScore, checkIfExamScoreExists } from "../models/prediction.model";
+import { findExamScoreById, createExamScore, checkIfExamScoreExists,updatedExamScores } from "../models/prediction.model";
 import { findSubjectIdByCode } from "../models/subjects.model";
 import { analyzeStudentPerformance } from "../services/geminiService";
 import { ApiError } from "../utils/ApiError";
@@ -41,6 +41,8 @@ const getEarlyMidSemPredictions = AsyncHandler(
         const upperLimitMarks = (GRADE_CONVERSION[grade].upperLimit * total_marks) / 100;
 
         const meanMarksRequired = (lowerLimitMarks + upperLimitMarks) / 2;
+        let eseMarksNeeded1;
+        let eseMarksNeeded2;
         let marksRequired1;
         let marksRequired2;
         let prediction1;
@@ -48,14 +50,14 @@ const getEarlyMidSemPredictions = AsyncHandler(
         let mseAvg = mse_total;
         if (mseAvg === mse_total) {
             marksRequired1 = mseAvg + isa_total + lab_total;
-            const eseMarksNeeded1 = meanMarksRequired - marksRequired1;
-            const prediction1 = ((eseMarksNeeded1 / ese_total) * 100).toFixed(2);
+            eseMarksNeeded1 = meanMarksRequired - marksRequired1;
+            prediction1 = ((eseMarksNeeded1 / ese_total) * 100).toFixed(2);
             mseAvg = (mse_marks + mse_total) / 2;
         }
         if (mseAvg === (mse_marks + mse_total) / 2) {
             marksRequired2 = mseAvg + isa_total + lab_total;
-            const eseMarksNeeded2 = meanMarksRequired - marksRequired2;
-            const prediction2 = ((eseMarksNeeded2 / ese_total) * 100).toFixed(2);
+            eseMarksNeeded2 = meanMarksRequired - marksRequired2;
+            prediction2 = ((eseMarksNeeded2 / ese_total) * 100).toFixed(2);
         }
         const subject = await findSubjectIdByCode(req.user.id, semester, code);
 
@@ -63,14 +65,14 @@ const getEarlyMidSemPredictions = AsyncHandler(
             throw new ApiError(500, "Subject is not added")
         }
 
-        const examScore = await createExamScore(req.user.id, subject.id, semester, isa_total, mse_marks, mse_total, ese_total, lab_total, grade, code, prediction1, prediction2, marksRequired1, marksRequired2, total_marks);
+        const examScore = await createExamScore(req.user.id, subject.id, semester, isa_total, mse_marks, mse_total, ese_total, lab_total, grade, code, prediction1, prediction2, marksRequired1, marksRequired2, total_marks,null,null,null);
 
         const addedExamScore = await findExamScoreById(examScore.id);
 
         if (!addedExamScore) {
             throw new ApiError(500, "Something went wrong while adding exam score data in the database")
         }
-        const response = await analyzeStudentPerformance({ ...addedExamScore, prediction1: `${prediction1}%`, prediction2: `${prediction2}%`, marksRequired1: eseMarksNeeded1, marksRequired2: eseMarksNeeded2, grade: grade, meanMarksRequired: meanMarksRequired })
+        const response = await analyzeStudentPerformance({ ...addedExamScore, prediction1: `${prediction1}%`, prediction2: `${prediction2}%`, marksRequired1: marksRequired1, marksRequired2: marksRequired2, eseMarksNeeded1 : eseMarksNeeded1,eseMarksNeeded2 : eseMarksNeeded2, grade: grade, meanMarksRequired: meanMarksRequired })
 
         if (!response) {
             ApiError(500, "Something went wrong while analyzing predictions")
@@ -115,7 +117,7 @@ const getEndSemPredictions = AsyncHandler(
         const isExists = await checkIfExamScoreExists(req.user.id, subject.id, semester, code);
 
         if (isExists) {
-            const updatingExamScores = await updateExamScores(prediction, marksObtained, mse2_marks, isExists.id, subject.id, semester);
+            const updatingExamScores = await updatedExamScores(prediction, marksObtained, mse2_marks, isExists.id, subject.id, semester);
 
             const updatedExamScores = await findExamScoreById(updatingExamScores.id);
 
@@ -123,7 +125,7 @@ const getEndSemPredictions = AsyncHandler(
                 throw new ApiError(500, "Something went wrong while updating exam score data in the database")
             }
 
-            const response = await analyzeStudentPerformance({ ...updatedExamScores, prediction1: `${prediction}%`, marksObtained: marksObtained, grade: grade, meanMarksRequired: meanMarksRequired });
+            const response = await analyzeStudentPerformance({ ...updatedExamScores, Prediction1: `${prediction}%`, marksObtained: marksObtained, grade: grade, meanMarksRequired: meanMarksRequired });
 
             if (!response) {
                 ApiError(500, "Something went wrong while analyzing predictions")
@@ -141,7 +143,7 @@ const getEndSemPredictions = AsyncHandler(
             )
         }
         else {
-            const examScore = await createExamScore(req.user.id, subject.id, semester, isa_total, mse_marks, mse_total, ese_total, lab_total, grade, code, total_marks, prediction, marksObtained, mse2_marks);
+            const examScore = await createExamScore(req.user.id, subject.id, semester, isa_total, mse_marks, mse_total, ese_total, lab_total, grade, code, null ,null ,null ,null ,total_marks, prediction, marksObtained, mse2_marks);
             const addedExamScore = await findExamScoreById(examScore.id);
 
             if (!addedExamScore) {
@@ -162,4 +164,5 @@ const getEndSemPredictions = AsyncHandler(
         }
 
     }
-)    
+)
+export { getEarlyMidSemPredictions,getEndSemPredictions }    
