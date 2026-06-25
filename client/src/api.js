@@ -29,6 +29,80 @@ export async function authUser() {
         method: "GET",
         credentials: "include"
     })
-
     return res
+}
+export async function getCurrentUser() {
+    const res = await fetch(`http://localhost:3000/api/v1/users/current-user`, {
+        method: "GET",
+        credentials: "include"
+    })
+    return res
+}
+export async function addSubjectToDatabase(data) {
+    const res = await fetch(`http://localhost:3000/api/v1/subject/add-subject`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+        credentials: "include"
+    })
+    return await res.json()
+}
+export async function getAllSemesterSubjectsFromDatabase() {
+    const res = await fetch(`http://localhost:3000/api/v1/subject/all-subjects`, {
+        method: "GET",
+        credentials: "include"
+    })
+    return await res.json()
+}
+export async function getAllSemesterSGPAFromDatabase(){
+     const res = await fetch(`http://localhost:3000/api/v1/analytics/all-sgpa`, {
+        method: "GET",
+        credentials: "include"
+    })
+    return await res.json()
+}
+export async function deleteSubjectFromDatabase(id){
+     const res = await fetch(`http://localhost:3000/api/v1/subject/${id}`, {
+        method: "DELETE",
+        credentials: "include"
+    })
+    return await res.json()
+}
+export async function getIA1Predictions(data) {
+    const res = await fetch(`http://localhost:3000/api/v1/predictions/ia1`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+        credentials: "include"
+    })
+    return await res.json();
+}
+export async function getIA2Predictions(data) {
+    const res = await fetch(`http://localhost:3000/api/v1/predictions/ia2`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+        credentials: "include"
+    })
+    return await res.json();
+}
+export async function getAllIA1Predictions(){
+    const res = await fetch(`http://localhost:3000/api/v1/predictions/all-ia1-analysis`,{
+        method : "GET",
+        credentials : "include"
+    })
+    return await res.json();
+}
+export async function getAllIA2Predictions(){
+    const res = await fetch(`http://localhost:3000/api/v1/predictions/all-ia2-analysis`,{
+        method : "GET",
+        credentials : "include"
+    })
+    return await res.json();
 }

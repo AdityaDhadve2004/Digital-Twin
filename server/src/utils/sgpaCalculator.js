@@ -15,7 +15,7 @@ export const calculateSGPA = (subjectsArr) => {
     let totalSum = 0;
     subjectsArr.forEach(subject => {
         if (subject.grade === 'F') {
-            return
+            return 
         }
         totalSum = totalSum + (GRADE_POINTS[subject.grade] || 0) * subject.credits
         totalCredits = totalCredits + subject.credits

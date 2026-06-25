@@ -6,7 +6,7 @@ const addSubject = AsyncHandler(
     async (req, res) => {
         const { name, credits, semester, grade, code } = req.body;
 
-        if (!name || !credits || !semester || !grade || !code) {
+        if (!name || !credits || !semester || !code) {
             throw new ApiError(400, "All fields are required")
         }
 
@@ -87,3 +87,4 @@ const updateSubject = AsyncHandler(
         )
     }
 )
+export {addSubject,getAllSubjects,deleteSubject,getSubject,updateSubject}

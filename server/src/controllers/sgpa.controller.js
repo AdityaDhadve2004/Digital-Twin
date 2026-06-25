@@ -8,13 +8,11 @@ const getSemesterSGPA = AsyncHandler(
     async (req, res) => {
         const { semester } = req.params;
         const semesterSubjects = await getAllSubjectsBySemModel(req.user.id, semester);
-        const hasAllGrades = semesterSubjects.every(s =>
+        const hasAllGradesSubjects = semesterSubjects.filter(s =>
             s.grade !== null
         )
-        if (!hasAllGrades) {
-            throw new ApiError(400, "Not all subjects have grades yet")
-        }
-        const sgpa = calculateSGPA(semesterSubjects);
+        
+        const sgpa = calculateSGPA(hasAllGradesSubjects);
 
         return res.status(200).json(
             new ApiResponse(200, { pointer: sgpa, sem: semester }, "SGPA calculated successfully")
@@ -27,18 +25,13 @@ const getAllSemesterSGPA = AsyncHandler(
         let arr = [];
         for (let i = 1; i <= 8; i++) {
             const specificSemesterSubjects = allSemesterSubjects.filter(subject =>
-                subject.semester === i
+                subject.semester === i && subject.grade !== null,
             )
 
             if (specificSemesterSubjects.length === 0) {
                 continue
             }
 
-            const hasAllGrades = specificSemesterSubjects.every(s => s.grade !== null)
-
-            if (!hasAllGrades) {
-                continue 
-            }
 
             const sgpa = calculateSGPA(specificSemesterSubjects)
 

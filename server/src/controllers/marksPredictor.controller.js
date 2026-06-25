@@ -1,9 +1,9 @@
-import { AsyncHandler } from "../utils/asyncHandler";
-import { findExamScoreById, createExamScore, checkIfExamScoreExists,updatedExamScores } from "../models/prediction.model";
-import { findSubjectIdByCode } from "../models/subjects.model";
-import { analyzeStudentPerformance } from "../services/geminiService";
-import { ApiError } from "../utils/ApiError";
-import { ApiResponse } from "../utils/ApiResponse";
+import { AsyncHandler } from "../utils/asyncHandler.js";
+import { findExamScoreById, createExamScore, checkIfExamScoreExists, updatedExamScores, createAnalysis, getAllPredictionAnalysis,updateAnalysis } from "../models/prediction.model.js";
+import { findSubjectIdByCode } from "../models/subjects.model.js";
+import { analyzeStudentPerformance } from "../services/geminiService.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 const GRADE_CONVERSION = {
     "O": {
         lowerLimit: 80, upperLimit: 100
@@ -32,10 +32,19 @@ const GRADE_CONVERSION = {
 }
 const getEarlyMidSemPredictions = AsyncHandler(
     async (req, res) => {
-        const { semester, isa_total, mse_marks, mse_total, ese_total, lab_total, grade, code, total_marks } = req.body;
-        if (!isa_total || !mse_marks || !semester || !mse_total || !ese_total || !lab_total || !total_marks || !grade) {
-            throw new ApiError(400, "All fields are required")
-        }
+
+        const semester = Number(req.body.semester);
+        const isa_total = Number(req.body.isa_total);
+        const mse_marks = Number(req.body.mse_marks);
+        const mse_total = Number(req.body.mse_total);
+        const ese_total = Number(req.body.ese_total);
+        const lab_total = Number(req.body.lab_total);
+        const total_marks = Number(req.body.total_marks);
+
+
+
+        const { grade, code } = req.body;
+
         const lowerLimitMarks = (GRADE_CONVERSION[grade].lowerLimit * total_marks) / 100;
 
         const upperLimitMarks = (GRADE_CONVERSION[grade].upperLimit * total_marks) / 100;
@@ -65,20 +74,18 @@ const getEarlyMidSemPredictions = AsyncHandler(
             throw new ApiError(500, "Subject is not added")
         }
 
-        const examScore = await createExamScore(req.user.id, subject.id, semester, isa_total, mse_marks, mse_total, ese_total, lab_total, grade, code, prediction1, prediction2, marksRequired1, marksRequired2, total_marks,null,null,null);
+        const examScore = await createExamScore(req.user.id, subject.id, semester, isa_total, mse_marks, mse_total, ese_total, lab_total, grade, code, prediction1, prediction2, marksRequired1, marksRequired2, total_marks, null, null, null);
 
         const addedExamScore = await findExamScoreById(examScore.id);
 
         if (!addedExamScore) {
             throw new ApiError(500, "Something went wrong while adding exam score data in the database")
         }
-        const response = await analyzeStudentPerformance({ ...addedExamScore, prediction1: `${prediction1}%`, prediction2: `${prediction2}%`, marksRequired1: marksRequired1, marksRequired2: marksRequired2, eseMarksNeeded1 : eseMarksNeeded1,eseMarksNeeded2 : eseMarksNeeded2, grade: grade, meanMarksRequired: meanMarksRequired })
+        const response = await analyzeStudentPerformance({ ...addedExamScore, subject:subject.name, eseMarksNeeded1: eseMarksNeeded1, eseMarksNeeded2: eseMarksNeeded2, meanMarksRequired: meanMarksRequired },"IA1")
 
-        if (!response) {
-            ApiError(500, "Something went wrong while analyzing predictions")
-
+        if (!response.success) {
+            throw new ApiError(500, response.error);
         }
-
         const analysisRes = await createAnalysis(addedExamScore.id, req.user.id, "IA-1", response.analysis);
 
         if (!analysisRes) {
@@ -95,7 +102,20 @@ const getEarlyMidSemPredictions = AsyncHandler(
 
 const getEndSemPredictions = AsyncHandler(
     async (req, res) => {
-        const { semester, isa_total, mse_marks, mse_total, ese_total, lab_total, grade, code, mse2_marks, total_marks } = req.body;
+
+        const semester = Number(req.body.semester);
+        const isa_total = Number(req.body.isa_total);
+        const mse_marks = Number(req.body.mse_marks);
+        const mse_total = Number(req.body.mse_total);
+        const ese_total = Number(req.body.ese_total);
+        const lab_total = Number(req.body.lab_total);
+        const total_marks = Number(req.body.total_marks);
+        const mse2_marks = Number(req.body.mse2_marks);
+
+        const { grade, code } = req.body;
+        if (!isa_total || !mse_marks || !semester || !mse_total || !ese_total || !lab_total || !total_marks || !grade || !mse2_marks) {
+            throw new ApiError(400, "All fields are required")
+        }
 
         const lowerLimitMarks = (GRADE_CONVERSION[grade].lowerLimit * total_marks) / 100;
 
@@ -117,22 +137,26 @@ const getEndSemPredictions = AsyncHandler(
         const isExists = await checkIfExamScoreExists(req.user.id, subject.id, semester, code);
 
         if (isExists) {
+
+            if (isExists.mse_marks !== mse_marks) {
+                throw new ApiError(400,"Wrong marks mse_1 marks entered")     
+            }
             const updatingExamScores = await updatedExamScores(prediction, marksObtained, mse2_marks, isExists.id, subject.id, semester);
 
-            const updatedExamScores = await findExamScoreById(updatingExamScores.id);
+            const checkExamScoreExist = await findExamScoreById(updatingExamScores.id);
 
-            if (!updatedExamScores) {
+            if (!checkExamScoreExist) {
                 throw new ApiError(500, "Something went wrong while updating exam score data in the database")
             }
 
-            const response = await analyzeStudentPerformance({ ...updatedExamScores, Prediction1: `${prediction}%`, marksObtained: marksObtained, grade: grade, meanMarksRequired: meanMarksRequired });
+            const response = await analyzeStudentPerformance({ ...checkExamScoreExist, subject : subject.name , meanMarksRequired: meanMarksRequired },"IA2_COMPARISON");
 
             if (!response) {
                 ApiError(500, "Something went wrong while analyzing predictions")
 
             }
 
-            const analysisRes = await updateAnalysis(updatedExamScores.id, req.user.id, "IA-2", response.analysis);
+            const analysisRes = await updateAnalysis(checkExamScoreExist.id, req.user.id, "IA-2", response.analysis);
 
             if (!analysisRes) {
                 throw new ApiError(500, "Something went wrong while adding analysis in the database")
@@ -143,14 +167,14 @@ const getEndSemPredictions = AsyncHandler(
             )
         }
         else {
-            const examScore = await createExamScore(req.user.id, subject.id, semester, isa_total, mse_marks, mse_total, ese_total, lab_total, grade, code, null ,null ,null ,null ,total_marks, prediction, marksObtained, mse2_marks);
+            const examScore = await createExamScore(req.user.id, subject.id, semester, isa_total, mse_marks, mse_total, ese_total, lab_total, grade, code, null, null, null, null, total_marks, prediction, marksObtained, mse2_marks);
             const addedExamScore = await findExamScoreById(examScore.id);
 
             if (!addedExamScore) {
                 throw new ApiError(500, "Something went wrong while adding exam score data in the database")
             }
 
-            const response = await analyzeStudentPerformance({ ...addedExamScore, prediction1: `${prediction}%`, marksObtained: marksObtained, grade: grade, meanMarksRequired: meanMarksRequired });
+            const response = await analyzeStudentPerformance({ ...addedExamScore, subject : subject.name, meanMarksRequired: meanMarksRequired },"IA2_FIRST_TIME");
 
             const analysisRes = await createAnalysis(addedExamScore.id, req.user.id, "IA-2", response.analysis);
 
@@ -165,4 +189,28 @@ const getEndSemPredictions = AsyncHandler(
 
     }
 )
-export { getEarlyMidSemPredictions,getEndSemPredictions }    
+const getAllUserIA1Analysis = AsyncHandler(
+    async (req, res) => {
+        const allUserAnalysis = await getAllPredictionAnalysis(req.user.id,"IA-1");
+        if (!allUserAnalysis) {
+            throw new ApiError(500, "Something went wrong while fetching analysis data")
+        }
+        return res.status(201).json(
+            new ApiResponse(201, allUserAnalysis, "Fetched analysis data successfully")
+        )
+
+    }
+)
+const getAllUserIA2Analysis = AsyncHandler(
+    async (req, res) => {
+        const allUserAnalysis = await getAllPredictionAnalysis(req.user.id,"IA-2");
+        if (!allUserAnalysis) {
+            throw new ApiError(500, "Something went wrong while fetching analysis data")
+        }
+        return res.status(201).json(
+            new ApiResponse(201, allUserAnalysis, "Fetched analysis data successfully")
+        )
+
+    }
+)
+export { getEarlyMidSemPredictions, getEndSemPredictions, getAllUserIA1Analysis, getAllUserIA2Analysis}    

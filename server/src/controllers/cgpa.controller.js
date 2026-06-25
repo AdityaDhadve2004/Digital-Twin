@@ -1,6 +1,7 @@
-import { AsyncHandler } from "../utils/AsyncHandler";
-import { getAllSubjectsModel } from "../models/subjects.model";
-import { calculateCGPA, calculateSGPA } from "../utils/cgpaCalculator";
+import { AsyncHandler } from "../utils/AsyncHandler.js";
+import { getAllSubjectsModel } from "../models/subjects.model.js";
+import { calculateSGPA } from "../utils/sgpaCalculator.js";
+import { calculateCGPA } from "../utils/cgpaCalculator.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 const getCGPA = AsyncHandler(
@@ -9,16 +10,10 @@ const getCGPA = AsyncHandler(
         let arr = [];
         for (let i = 1; i <= 8; i++) {
             const specificSemesterSubjects = allSemesterSubjects.filter(subject =>
-                subject.semester === i
+                subject.semester === i && subject.grade !== null
             )
 
             if (specificSemesterSubjects.length === 0) {
-                continue
-            }
-
-            const hasAllGrades = specificSemesterSubjects.every(s => s.grade !== null)
-
-            if (!hasAllGrades) {
                 continue
             }
 

@@ -11,7 +11,7 @@ export const addSubjectsModel = async(userId,name,credits,semester,grade,code) =
         `INSERT INTO subjects (id,user_id,name,credits,semester,grade,code)
          VALUES(uuid_generate_v4(),$1,$2,$3,$4,$5,$6) RETURNING *
         `,
-        [userId,name,credits,semester,grade,code]
+        [userId,name,credits,semester,grade || null ,code]
     )
     return res.rows[0];
 }
