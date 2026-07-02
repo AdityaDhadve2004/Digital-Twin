@@ -106,3 +106,31 @@ export async function getAllIA2Predictions(){
     })
     return await res.json();
 }
+export async function getCGPAFromDatabase(){
+    const res = await fetch(`http://localhost:3000/api/v1/analytics/cgpa`,{
+        method : "GET",
+        credentials : "include"
+    })
+    return await res.json();
+}
+export async function createDashBoardDataHelper(target){
+    const res = await fetch(`http://localhost:3000/api/v1/dashboard/${target}`,{
+        method : "POST",
+        credentials : "include"
+    })
+    return await res.json();
+}
+export async function getDashBoardDataFromDatabase(){
+    const res = await fetch(`http://localhost:3000/api/v1/dashboard/dashboard-data`,{
+        method : "GET",
+        credentials : "include"
+    })
+    return await res.json();
+}
+export async function deleteDashboardDataFromDatabase(){
+    const res = await fetch(`http://localhost:3000/api/v1/dashboard/delete-dashdata`,{
+        method : "DELETE",
+        credentials : "include"
+    })
+    return res;
+}

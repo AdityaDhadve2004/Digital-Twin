@@ -56,10 +56,8 @@ export default function SemesterModal({ isOpen, onClose, semester, onUpdateSubje
       "text-orange-500 border-neutral-700 bg-neutral-800"
     );
   };
-
   return (
     <>
-      {/* Keyframes Tailwind can't express natively */}
       <style>{`
         @keyframes rowIn {
           from { opacity: 0; transform: translateY(6px); }
@@ -80,11 +78,13 @@ export default function SemesterModal({ isOpen, onClose, semester, onUpdateSubje
         ref={overlayRef}
         onClick={(e) => e.target === overlayRef.current && onClose()}
         className={`
+
   fixed inset-0 z-50
   flex items-center justify-center
   p-4
   overflow-y-auto
-  bg-black/75 backdrop-blur-sm
+  bg-[#1F1F1F] backdrop-blur-sm
+  border: 1px solid #2C2C2C
   transition-opacity duration-300
   ${visible ? "opacity-100" : "opacity-0"}
 `}
@@ -97,8 +97,8 @@ export default function SemesterModal({ isOpen, onClose, semester, onUpdateSubje
     rounded-2xl
     overflow-hidden
     flex flex-col
-    bg-[#111]
-    border border-orange-500/60
+    bg-[#1F1F1F]
+    border: 1px solid #2C2C2C
     shadow-[0_0_40px_rgba(255,106,0,0.2),0_20px_60px_rgba(0,0,0,0.8)]
     ${visible ? "modal-in" : "modal-out"}
   `}
@@ -212,7 +212,7 @@ export default function SemesterModal({ isOpen, onClose, semester, onUpdateSubje
                       <button
                         title="Update subject"
                         onClick={() => {
-                          setForm(true)  
+                          setForm(true)
                         }}
                         className="w-7 h-7 flex items-center justify-center rounded-lg bg-neutral-800 border border-neutral-700 text-neutral-400 hover:text-orange-400 hover:border-orange-500/60 hover:bg-orange-500/10 transition-colors duration-200 opacity-0 group-hover:opacity-100"
                       >
@@ -231,7 +231,7 @@ export default function SemesterModal({ isOpen, onClose, semester, onUpdateSubje
                         title="Delete subject"
                         onClick={(e) => {
                           e.stopPropagation()
-                          onDeleteSubject(sub.id)        
+                          onDeleteSubject(sub.id)
                         }
                         }
                         className="w-7 h-7 flex items-center justify-center rounded-lg bg-neutral-800 border border-neutral-700 text-neutral-400 hover:text-red-400 hover:border-red-500/60 hover:bg-red-500/10 transition-colors duration-200 opacity-0 group-hover:opacity-100"
@@ -253,7 +253,7 @@ export default function SemesterModal({ isOpen, onClose, semester, onUpdateSubje
                   No subjects added yet.
                 </p>
               )}
-            </div>{ form ? (<Form>
+            </div>{form ? (<Form>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 items-end">
                 <div className="flex flex-col">
                   <label className="text-sm font-semibold text-gray-700 mb-2">Credits *</label>
@@ -300,7 +300,7 @@ export default function SemesterModal({ isOpen, onClose, semester, onUpdateSubje
               </div>
 
               <div>
-                <button onClick={(e)=>{
+                <button onClick={(e) => {
                   e.stopPropagation();
                   onUpdateSubject(sub.id)
                 }}
@@ -313,12 +313,14 @@ export default function SemesterModal({ isOpen, onClose, semester, onUpdateSubje
             </Form>
 
             ) : null}
-      
+
           </div>
 
         </div>
       </div>
+     
     </>
-  );
+  )
+
 }
 

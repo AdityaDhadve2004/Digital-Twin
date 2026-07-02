@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 import { Form } from "react-router-dom";
-import MainLogo from "../assets/Untitled.jpg"
+import MainLogo from "../assets/Firefly_Gemini Flash_Design a premium minimal flat vector logo for an AI-powered academic assistant called 373158.png"
 import React from "react";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 import { loginUser } from "../api";
-import { useActionData,redirect } from "react-router-dom";
-export async function actionLogin({ request }){
+import { useActionData, redirect } from "react-router-dom";
+export async function actionLogin({ request }) {
   const formData = await request.formData()
   console.log(formData);
   const jsonData = Object.fromEntries(formData);
-  const res = await loginUser(jsonData); 
+  const res = await loginUser(jsonData);
   if (res) {
-    return redirect("/dashboard");  
+    return redirect("/dashboard");
   }
 }
 
@@ -20,87 +20,157 @@ export default function Login() {
   console.log(data);
 
   return (
-    <div className="min-h-screen bg-[#f7f6f4] flex flex-col items-center justify-center px-4">
-      {/* Header */}
-      <div className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-[#2b241f] flex items-center gap-3">
-          <div><img src={MainLogo} width="55px" height="40px" alt="" /></div>
-          Digital Twin
-        </h1>
+    <div className="min-h-screen bg-[#1B1917] flex items-center justify-center px-6 py-12">
 
-        <p className="mt-4 text-2xl text-[#5f564e]">
-          Welcome back! Sign in to continue
-        </p>
-      </div>
+      <div className="w-full max-w-xl">
 
-      {/* Login Card */}
-      <div className="w-full max-w-2xl bg-white rounded-3xl border border-gray-200 shadow-lg p-10">
-        {/* Email */}
-        <Form method="POST">
-          <div className="mb-8">
-            <label className="block text-lg font-medium text-[#4d4741] mb-3">
-              Email
-            </label>
+        {/* Logo */}
 
-            <div className="flex items-center border border-gray-300 rounded-2xl px-5 h-16">
-              <Mail className="w-6 h-6 text-gray-400" />
+        <div className="text-center mb-10">
 
-              <input
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                className="ml-4 w-full bg-transparent outline-none text-lg text-[#4d4741] placeholder:text-gray-400"
-              />
-            </div>
+          <div className="flex justify-center mb-5">
+
+            <img
+              src={MainLogo}
+              alt="Digital Twin"
+              className="w-16 h-16 rounded-2xl shadow-lg"
+            />
+
           </div>
 
-          {/* Password */}
-          <div>
-            <label className="block text-lg font-medium text-[#4d4741] mb-3">
-              Password
-            </label>
+          <h1 className="text-4xl font-semibold tracking-tight text-[#ECE7DF]">
 
-            <div className="flex items-center border border-gray-300 rounded-2xl px-5 h-16">
-              <Lock className="w-6 h-6 text-gray-400" />
-
-              <input
-                name="password"
-                type="password"
-                placeholder="Enter your password"
-                className="ml-4 w-full bg-transparent outline-none text-lg text-[#4d4741] placeholder:text-gray-400"
-              />
+            <div className="inline-flex rounded-full border border-[#35312C] bg-[#24211D] px-4 py-2 text-sm text-[#A79F95] mb-6">
+              🔐 Secure Login
             </div>
 
-            <div className="mt-3 text-right">
-              <button className="text-[#6a6159] hover:text-[#4d4741] transition">
-                Forgot Password?
-              </button>
-            </div>
-          </div>
+          </h1>
 
-          {/* Login Button */}
-          <button className="w-full mt-8 bg-[#4a443d] hover:bg-[#3d3832] text-white font-semibold text-xl py-4 rounded-2xl flex items-center justify-center gap-3 shadow-md transition">
-            Sign In
-            <ArrowRight className="w-6 h-6" />
-          </button>
-        </Form>
-        {/* Divider */}
-        <div className="flex items-center my-8">
-          <div className="flex-1 border-t border-gray-300"></div>
+          <p className="mt-3 text-lg text-[#A79F95]">
 
-          <span className="px-4 text-[#6a6159]">or</span>
+            Sign in to continue using your Academic Digital Twin.
 
-          <div className="flex-1 border-t border-gray-300"></div>
+          </p>
+
         </div>
 
-        {/* Footer */}
-        <p className="text-center text-[#5f564e] text-lg">
-          Don't have an account?{" "}
-          <Link to="/signup" className="font-semibold text-[#3d3832] hover:underline">
-            Create Account
-          </Link>
-        </p>
+        {/* Login Card */}
+
+        <div className="rounded-[32px] border border-[#35312C] bg-[#24211D] p-10 shadow-[0_10px_30px_rgba(0,0,0,.20)]">
+
+          <Form method="POST">
+
+            {/* Email */}
+
+            <div className="mb-7">
+
+              <label className="mb-3 block text-sm font-medium text-[#B5ADA4]">
+
+                Email Address
+
+              </label>
+
+              <div className="flex h-14 items-center rounded-2xl border border-[#35312C] bg-[#2B2823] px-5 focus-within:border-[#D97757] transition">
+
+                <Mail className="h-5 w-5 text-[#8A837A]" />
+
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  className="ml-4 w-full bg-transparent text-[#ECE7DF] placeholder:text-[#7F786F] outline-none"
+                />
+
+              </div>
+
+            </div>
+
+            {/* Password */}
+
+            <div>
+
+              <label className="mb-3 block text-sm font-medium text-[#B5ADA4]">
+
+                Password
+
+              </label>
+
+              <div className="flex h-14 items-center rounded-2xl border border-[#35312C] bg-[#2B2823] px-5 focus-within:border-[#D97757] transition">
+
+                <Lock className="h-5 w-5 text-[#8A837A]" />
+
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  className="ml-4 w-full bg-transparent text-[#ECE7DF] placeholder:text-[#7F786F] outline-none"
+                />
+
+              </div>
+
+              <div className="mt-4 flex justify-end">
+
+                <button
+                  type="button"
+                  className="text-sm text-[#A79F95] transition hover:text-[#D97757]"
+                >
+                  Forgot Password?
+                </button>
+
+              </div>
+
+            </div>
+
+            {/* Login Button */}
+
+            <button
+              type="submit"
+              className="mt-8 flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-[#D97757] text-lg font-medium text-white transition-all duration-200 hover:bg-[#C86645] hover:scale-[1.01]"
+            >
+
+              Sign In
+
+              <ArrowRight className="h-5 w-5" />
+
+            </button>
+
+          </Form>
+
+          {/* Divider */}
+
+          <div className="my-8 flex items-center">
+
+            <div className="h-px flex-1 bg-[#35312C]" />
+
+            <span className="mx-4 text-sm text-[#7F786F]">
+
+              OR
+
+            </span>
+
+            <div className="h-px flex-1 bg-[#35312C]" />
+
+          </div>
+
+          {/* Footer */}
+
+          <p className="text-center text-[#A79F95]">
+
+            Don't have an account?{" "}
+
+            <Link
+              to="/signup"
+              className="font-medium text-[#D97757] transition hover:underline"
+            >
+              Create Account
+            </Link>
+
+          </p>
+
+        </div>
+
       </div>
+
     </div>
   );
 };

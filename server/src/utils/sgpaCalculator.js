@@ -5,6 +5,7 @@ const GRADE_POINTS = {
     'C': 7,
     'D': 6,
     'E': 5,
+    'P': 4,
     'F': 0
 }
 export const calculateSGPA = (subjectsArr) => {

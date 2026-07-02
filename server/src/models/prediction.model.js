@@ -9,27 +9,27 @@ export const findExamScoreById = async (examScoreId) => {
 export const createExamScore = async (userId, subjectId, semester, isaTotal, mseMarks, mseTotal, eseTotal, labTotal, grade, code, prediction1, prediction2, marksReq1, marksReq2, totalMarks, endPrediction, marksObtained, mse2Marks) => {
     try {
         const res = await pool.query(
-        `INSERT INTO exam_scores (id,user_id,subject_id,semester,isa_total,mse_marks,mse_total,ese_total,lab_total,grade,code,ia1_pred_scenario1_ese_percent,ia1_pred_scenario2_ese_percent,ia1_marks_req_scenario1,ia1_marks_req_scenario2,total_marks,ia2_pred_ese_percent,ia2_marks_obtained,mse2_marks)
+            `INSERT INTO exam_scores (id,user_id,subject_id,semester,isa_total,mse_marks,mse_total,ese_total,lab_total,grade,code,ia1_pred_scenario1_ese_percent,ia1_pred_scenario2_ese_percent,ia1_marks_req_scenario1,ia1_marks_req_scenario2,total_marks,ia2_pred_ese_percent,ia2_marks_obtained,mse2_marks)
          VALUES(uuid_generate_v4(),$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18) RETURNING *
         `,
-        [userId, subjectId, semester, isaTotal, mseMarks, mseTotal, eseTotal, labTotal || 0, grade, code, prediction1 || 0, prediction2 || 0, marksReq1 || 0, marksReq2 || 0, totalMarks, endPrediction || 0, marksObtained || 0, mse2Marks || 0]
-    )
-    return res.rows[0];
-        
+            [userId, subjectId, semester, isaTotal, mseMarks, mseTotal, eseTotal, labTotal || 0, grade, code, prediction1 || 0, prediction2 || 0, marksReq1 || 0, marksReq2 || 0, totalMarks, endPrediction || 0, marksObtained || 0, mse2Marks || 0]
+        )
+        return res.rows[0];
+
     } catch (err) {
         console.log("========== PostgreSQL Error ==========");
-    console.log(err);
-    console.log("Code:", err.code);
-    console.log("Message:", err.message);
-    console.log("Detail:", err.detail);
-    console.log("Hint:", err.hint);
-    console.log("Where:", err.where);
-    console.log("======================================");
+        console.log(err);
+        console.log("Code:", err.code);
+        console.log("Message:", err.message);
+        console.log("Detail:", err.detail);
+        console.log("Hint:", err.hint);
+        console.log("Where:", err.where);
+        console.log("======================================");
 
-    throw err;
-        
+        throw err;
+
     }
-    
+
 }
 export const createAnalysis = async (examScoreId, userId, analysis_type, text) => {
     const res = await pool.query(
@@ -86,10 +86,38 @@ export const updateAnalysis = async (examScoreId, userId, analysis_type, text) =
     )
     return res.rows[0];
 }
-export const getAllPredictionAnalysis = async (subjectId,type) => {
+export const getAllPredictionAnalysis = async (userId, type) => {
     const res = await pool.query(
-        `SELECT * FROM prediction_analysis WHERE user_id=$1 AND  analysis_type=$2 `,
-        [subjectId,type]
+        `
+        SELECT
+            pa.id,
+            pa.analysis_type,
+            pa.gemini_analysis,
+            pa.generated_at,
+
+            s.name AS subject_name,
+            s.code,
+            s.semester,
+
+            es.grade,
+            es.ia1_pred_scenario1_ese_percent,
+            es.ia1_pred_scenario2_ese_percent,
+            es.ia2_pred_ese_percent
+
+        FROM prediction_analysis pa
+
+        INNER JOIN exam_scores es
+            ON pa.exam_score_id = es.id
+
+        INNER JOIN subjects s
+            ON es.subject_id = s.id
+
+        WHERE pa.user_id = $1
+        AND pa.analysis_type = $2
+
+        ORDER BY pa.generated_at DESC;
+        `,
+        [userId, type]
     )
     return res.rows;
 }
