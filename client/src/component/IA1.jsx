@@ -21,7 +21,6 @@ export default function IA1({
 }) {
     const data = useActionData();
     const ia1 = useLoaderData();
-    console.log(ia1.data);
     const [isFormDisable, setIsFormDisable] = useState(true);
     const [open, setOpen] = useState(false);
     const contentRef = useRef(null);

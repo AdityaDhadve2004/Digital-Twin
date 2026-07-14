@@ -1,6 +1,5 @@
 import { useLoaderData, Form, useRevalidator } from "react-router-dom";
 import { createDashBoardDataHelper, getCurrentUser, getDashBoardDataFromDatabase } from "../api"
-import UserInfo from "../component/UserInfo";
 import AddSubjectForm from "../form/AddSubjectForm";
 import { useRef } from "react";
 import Display from "../component/Display";

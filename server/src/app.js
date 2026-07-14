@@ -19,6 +19,7 @@ import pointercalculationRouter from "./routes/pointerCalculation.route.js"
 import predictionRouter from "./routes/predictionAnalysis.route.js"
 import subjectRouter from "./routes/subjects.route.js"
 import dashboardRouter from "./routes/dashboard.route.js"
+import planRouter from "./routes/plan.route.js"
 
 app.use("/api/v1/users",userRouter)
 app.use("/api/v1/auth",authRouter)
@@ -26,4 +27,6 @@ app.use("/api/v1/subject",subjectRouter)
 app.use("/api/v1/analytics",pointercalculationRouter)
 app.use("/api/v1/predictions",predictionRouter)
 app.use("/api/v1/dashboard",dashboardRouter)
+app.use("/api/v1/generateplan",planRouter)
+
 export {app}

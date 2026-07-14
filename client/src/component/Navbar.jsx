@@ -1,4 +1,3 @@
-import Slider from "../component/Slider";
 import MainLogo from "../assets/Firefly_Gemini Flash_Design a premium minimal flat vector logo for an AI-powered academic assistant called 373158.png"
 import { NavLink } from "react-router-dom"
 import { useState } from "react";
@@ -35,7 +34,7 @@ export default function Navbar() {
                         }
                     >
                         Dashboard
-                    </NavLink>
+                    </NavLink>      
 
                     <NavLink
                         to="/dashboard/calculation"
@@ -110,6 +109,20 @@ export default function Navbar() {
 
                         </div>
                     </div>
+                     <NavLink
+                        to="/dashboard/planner"
+                        end
+                        className={({ isActive }) =>
+                            `flex items-center gap-3 rounded-2xl px-4 py-3.5 transition-all duration-200 border
+                            
+                            ${isActive
+                                ? "bg-[#2B2823] border-[#D97757]/30 text-white"
+                                : "border-transparent text-[#B5ADA4] hover:bg-[#24211D] hover:text-white"
+                            }`
+                        }
+                    >
+                        Academic Planner
+                    </NavLink>
 
                 </nav>
             </div>

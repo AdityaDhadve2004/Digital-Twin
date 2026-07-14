@@ -56,15 +56,15 @@ export async function getAllSemesterSubjectsFromDatabase() {
     })
     return await res.json()
 }
-export async function getAllSemesterSGPAFromDatabase(){
-     const res = await fetch(`http://localhost:3000/api/v1/analytics/all-sgpa`, {
+export async function getAllSemesterSGPAFromDatabase() {
+    const res = await fetch(`http://localhost:3000/api/v1/analytics/all-sgpa`, {
         method: "GET",
         credentials: "include"
     })
     return await res.json()
 }
-export async function deleteSubjectFromDatabase(id){
-     const res = await fetch(`http://localhost:3000/api/v1/subject/${id}`, {
+export async function deleteSubjectFromDatabase(id) {
+    const res = await fetch(`http://localhost:3000/api/v1/subject/${id}`, {
         method: "DELETE",
         credentials: "include"
     })
@@ -92,45 +92,76 @@ export async function getIA2Predictions(data) {
     })
     return await res.json();
 }
-export async function getAllIA1Predictions(){
-    const res = await fetch(`http://localhost:3000/api/v1/predictions/all-ia1-analysis`,{
-        method : "GET",
-        credentials : "include"
+export async function getAllIA1Predictions() {
+    const res = await fetch(`http://localhost:3000/api/v1/predictions/all-ia1-analysis`, {
+        method: "GET",
+        credentials: "include"
     })
     return await res.json();
 }
-export async function getAllIA2Predictions(){
-    const res = await fetch(`http://localhost:3000/api/v1/predictions/all-ia2-analysis`,{
-        method : "GET",
-        credentials : "include"
+export async function getAllIA2Predictions() {
+    const res = await fetch(`http://localhost:3000/api/v1/predictions/all-ia2-analysis`, {
+        method: "GET",
+        credentials: "include"
     })
     return await res.json();
 }
-export async function getCGPAFromDatabase(){
-    const res = await fetch(`http://localhost:3000/api/v1/analytics/cgpa`,{
-        method : "GET",
-        credentials : "include"
+export async function getCGPAFromDatabase() {
+    const res = await fetch(`http://localhost:3000/api/v1/analytics/cgpa`, {
+        method: "GET",
+        credentials: "include"
     })
     return await res.json();
 }
-export async function createDashBoardDataHelper(target){
-    const res = await fetch(`http://localhost:3000/api/v1/dashboard/${target}`,{
-        method : "POST",
-        credentials : "include"
+export async function createDashBoardDataHelper(target) {
+    const res = await fetch(`http://localhost:3000/api/v1/dashboard/${target}`, {
+        method: "POST",
+        credentials: "include"
     })
     return await res.json();
 }
-export async function getDashBoardDataFromDatabase(){
-    const res = await fetch(`http://localhost:3000/api/v1/dashboard/dashboard-data`,{
-        method : "GET",
-        credentials : "include"
+export async function getDashBoardDataFromDatabase() {
+    const res = await fetch(`http://localhost:3000/api/v1/dashboard/dashboard-data`, {
+        method: "GET",
+        credentials: "include"
     })
     return await res.json();
 }
-export async function deleteDashboardDataFromDatabase(){
-    const res = await fetch(`http://localhost:3000/api/v1/dashboard/delete-dashdata`,{
-        method : "DELETE",
-        credentials : "include"
+export async function deleteDashboardDataFromDatabase() {
+    const res = await fetch(`http://localhost:3000/api/v1/dashboard/delete-dashdata`, {
+        method: "DELETE",
+        credentials: "include"
     })
     return res;
+}
+export async function getAiPlanFromDatabase(formData) {
+    const res = await fetch(`http://localhost:3000/api/v1/generateplan/plan`, {
+        method: "POST",
+        body: formData,
+        credentials: "include"
+    })
+    return await res.json();
+
+}
+export async function getAllPlansFromDatabase() {
+    const res = await fetch(`http://localhost:3000/api/v1/generateplan/all-plans`, {
+        method: "GET",
+        credentials: "include"
+    })
+    return await res.json();
+}
+export async function changeCurrentDayInDatabase(planId) {
+    const res = await fetch(`http://localhost:3000/api/v1/generateplan/change-day/${planId}`, {
+        method: "PATCH",
+        credentials: "include"
+    })
+    return await res.json();
+}
+export async function changePlanStatusInDatabase(planId) {
+    const res = await fetch(`http://localhost:3000/api/v1/generateplan/status/${planId}`, {
+        method: "PATCH",
+        credentials: "include"
+    })
+    return await res.json();
+
 }

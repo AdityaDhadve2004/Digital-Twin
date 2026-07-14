@@ -1,7 +1,7 @@
 import { AsyncHandler } from "../utils/asyncHandler.js";
 import { findExamScoreById, createExamScore, checkIfExamScoreExists, updatedExamScores, createAnalysis, getAllPredictionAnalysis,updateAnalysis } from "../models/prediction.model.js";
 import { findSubjectIdByCode } from "../models/subjects.model.js";
-import { analyzeStudentPerformance } from "../services/geminiService.js";
+import { analyzeStudentPerformance } from "../services/AiService.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 const GRADE_CONVERSION = {

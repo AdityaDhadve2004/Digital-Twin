@@ -64,3 +64,10 @@ export const findSubjectIdByCode = async(userId,semester,code) => {
     )
     return res.rows[0];
 }
+export const findSubjectIdByCodeModel = async(userId,code) => {
+    const res = await pool.query(
+        `SELECT * FROM subjects WHERE user_id=$1 AND code=$2`,
+        [userId,code]
+    )
+    return res.rows[0];
+}
