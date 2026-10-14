@@ -41,7 +41,7 @@ export default function TodayFocus({ plan }) {
                     </div>
 
                     <h2 className="mt-5 text-4xl font-semibold text-[#ECE7DF]">
-                        Day {today.day}
+                        {today.title}
                     </h2>
 
                 </div>
@@ -50,7 +50,7 @@ export default function TodayFocus({ plan }) {
                     className="
                         rounded-2xl
                         bg-[#2B2823]
-                        px-5
+                        px-6
                         py-4
                         text-center
                     "
@@ -68,17 +68,7 @@ export default function TodayFocus({ plan }) {
 
             </div>
 
-            {/* Title */}
-
-            <div className="mt-10">
-
-                <h3 className="text-3xl font-semibold text-[#ECE7DF]">
-                    {today.title}
-                </h3>
-
-            </div>
-
-            {/* Objective */}
+            {/* Study Strategy */}
 
             <div
                 className="
@@ -91,44 +81,205 @@ export default function TodayFocus({ plan }) {
                 "
             >
 
-                <p className="text-sm uppercase tracking-[0.15em] text-[#D97757]">
-                    Objective
-                </p>
+                <h3 className="text-sm uppercase tracking-[0.15em] text-[#D97757]">
+                    Study Strategy
+                </h3>
 
-                <p className="mt-4 text-lg leading-8 text-[#D8D4CD]">
-                    {today.objective}
-                </p>
-
-            </div>
-
-            {/* Description */}
-
-            <div
-                className="
-                    mt-6
-                    rounded-2xl
-                    border
-                    border-[#35312C]
-                    bg-[#2B2823]
-                    p-6
-                "
-            >
-
-                <p className="text-sm uppercase tracking-[0.15em] text-[#D97757]">
-                    Study Plan
-                </p>
-
-                <p className="mt-4 text-lg leading-9 text-[#CFC8BE]">
-                    {today.description}
+                <p className="mt-4 text-lg leading-9 text-[#D8D4CD]">
+                    {today.studyStrategy}
                 </p>
 
             </div>
 
-            {/* Motivation */}
+            {/* Topics */}
+
+            <div className="mt-8">
+
+                <h3 className="text-2xl font-semibold text-[#ECE7DF]">
+                    Topics To Cover
+                </h3>
+
+                <div className="mt-6 space-y-4">
+
+                    {today.topicsToCover.map((topic,index)=>(
+                        <div
+                            key={index}
+                            className="
+                                rounded-2xl
+                                border
+                                border-[#35312C]
+                                bg-[#2B2823]
+                                p-5
+                            "
+                        >
+
+                            <div className="flex justify-between items-center">
+
+                                <h4 className="text-xl font-semibold text-[#ECE7DF]">
+                                    {topic.topic}
+                                </h4>
+
+                                <span
+                                    className={`
+                                        rounded-full
+                                        px-3
+                                        py-1
+                                        text-xs
+                                        font-medium
+
+                                        ${
+                                            topic.importance === "Essential"
+                                            ? "bg-red-500/20 text-red-400"
+
+                                            : topic.importance === "Important"
+                                            ? "bg-orange-500/20 text-orange-400"
+
+                                            : "bg-blue-500/20 text-blue-400"
+                                        }
+                                    `}
+                                >
+                                    {topic.importance}
+                                </span>
+
+                            </div>
+
+                            <p className="mt-4 leading-8 text-[#CFC8BE]">
+                                {topic.reason}
+                            </p>
+
+                        </div>
+                    ))}
+
+                </div>
+
+            </div>
+
+            {/* Formulae */}
+
+            <div className="mt-10">
+
+                <h3 className="text-2xl font-semibold text-[#ECE7DF]">
+                    Important Formulae
+                </h3>
+
+                <div className="mt-5 space-y-4">
+
+                    {today.importantFormulas.map((formula,index)=>(
+
+                        <div
+                            key={index}
+                            className="
+                                rounded-xl
+                                border
+                                border-[#35312C]
+                                bg-[#2B2823]
+                                p-5
+                            "
+                        >
+
+                            <h4 className="font-semibold text-[#ECE7DF]">
+                                {formula.formula}
+                            </h4>
+
+                            <p className="mt-3 text-[#BEB6AB]">
+                                {formula.reason}
+                            </p>
+
+                        </div>
+
+                    ))}
+
+                </div>
+
+            </div>
+
+            {/* Numerical Types */}
+
+            <div className="mt-10">
+
+                <h3 className="text-2xl font-semibold text-[#ECE7DF]">
+                    Numerical Types
+                </h3>
+
+                <div className="grid grid-cols-2 gap-4 mt-5">
+
+                    {today.numericalTypes.map((item,index)=>(
+
+                        <div
+                            key={index}
+                            className="
+                                rounded-xl
+                                border
+                                border-[#35312C]
+                                bg-[#2B2823]
+                                p-5
+                            "
+                        >
+
+                            <h4 className="font-semibold text-[#ECE7DF]">
+                                {item.type}
+                            </h4>
+
+                            <p className="mt-3 text-[#BEB6AB]">
+                                {item.reason}
+                            </p>
+
+                        </div>
+
+                    ))}
+
+                </div>
+
+            </div>
+
+            {/* Common Mistakes */}
+
+            <div className="mt-10">
+
+                <h3 className="text-2xl font-semibold text-[#ECE7DF]">
+                    Common Mistakes
+                </h3>
+
+                <div className="mt-5 space-y-5">
+
+                    {today.commonMistakes.map((mistake,index)=>(
+
+                        <div
+                            key={index}
+                            className="
+                                rounded-2xl
+                                border
+                                border-red-500/20
+                                bg-red-500/10
+                                p-6
+                            "
+                        >
+
+                            <h4 className="font-semibold text-red-300">
+
+                                ⚠️ {mistake.mistake}
+
+                            </h4>
+
+                            <p className="mt-4 text-[#ECE7DF]">
+
+                                ✓ {mistake.avoid}
+
+                            </p>
+
+                        </div>
+
+                    ))}
+
+                </div>
+
+            </div>
+
+            {/* Revision */}
 
             <div
                 className="
-                    mt-6
+                    mt-10
                     rounded-2xl
                     border
                     border-green-500/20
@@ -137,25 +288,17 @@ export default function TodayFocus({ plan }) {
                 "
             >
 
-                <div className="flex items-start gap-4">
+                <h3 className="text-lg font-semibold text-green-300">
 
-                    <div className="text-3xl">
-                        💡
-                    </div>
+                    Revision Strategy
 
-                    <div>
+                </h3>
 
-                        <p className="text-sm uppercase tracking-[0.15em] text-green-400">
-                            Motivation
-                        </p>
+                <p className="mt-4 text-lg leading-9 text-[#ECE7DF]">
 
-                        <p className="mt-3 text-lg leading-8 text-[#ECE7DF]">
-                            {today.motivation}
-                        </p>
+                    {today.revisionStrategy}
 
-                    </div>
-
-                </div>
+                </p>
 
             </div>
 

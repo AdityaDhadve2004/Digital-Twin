@@ -19,9 +19,10 @@ export default function IA1({
     title,
     action = "POST",
 }) {
-    const data = useActionData();
+    const actionData = useActionData();
     const ia1 = useLoaderData();
     const [isFormDisable, setIsFormDisable] = useState(true);
+    const [isSelectedPlan, setSelectedPlan] = useState(null);
     const [open, setOpen] = useState(false);
     const contentRef = useRef(null);
     const [height, setHeight] = useState("0px");
@@ -29,10 +30,18 @@ export default function IA1({
     const navigation = useNavigation();
     const isSubmitting = navigation.state === "submitting";
 
-    useEffect(() => {
-        setIsFormDisable(!isFormDisable)
-    }, [data])
 
+    useEffect(() => {
+
+        if (actionData) {
+
+            setSelectedPlan(actionData.data);
+
+        }
+
+    }, [actionData]);
+
+   
     useEffect(() => {
         if (!contentRef.current) return;
 
@@ -43,6 +52,10 @@ export default function IA1({
         }
     }, [open]);
 
+    function getSelectedPlan(plan) {
+        setSelectedPlan(plan)
+    }
+
     return (
         <div className="grid grid-cols-12 gap-8 items-start">
 
@@ -50,7 +63,7 @@ export default function IA1({
             <div className="col-span-8">
 
                 <div className="rounded-3xl border border-[#35312C] bg-[#24211D] shadow-[0_10px_30px_rgba(0,0,0,.18)] overflow-hidden">
-                    {isFormDisable ? null : (
+                
                         <div>
                             <button
                                 onClick={() => setOpen(!open)}
@@ -253,10 +266,10 @@ export default function IA1({
 
                             </div>
                         </div>
-                    )}
+                    
 
                     {/* AI Analysis */}
-                    {data?.data?.text && (
+                    {isSelectedPlan?.data?.text && (
                         <div className="mt-8 rounded-3xl border border-[#35312C] bg-[#24211D] shadow-[0_10px_30px_rgba(0,0,0,.18)] overflow-hidden">
 
                             <div className="border-b border-[#35312C] px-8 py-6">
@@ -373,6 +386,7 @@ export default function IA1({
 
                     <PredictionRecents
                         predictions={ia1.data}
+                        event={getSelectedPlan}
                     />
 
                 </div>

@@ -1,6 +1,6 @@
 import PredictionCard from "./PredictionCard";
 
-export default function PredictionRecents({ predictions = [] }) {
+export default function PredictionRecents({event, predictions = [] }) {
     return (
         <div
             className="
@@ -44,6 +44,7 @@ export default function PredictionRecents({ predictions = [] }) {
                     predictions.map((prediction) => (
 
                         <PredictionCard
+                            event={event}
                             key={prediction.id}
                             prediction={prediction}
                         />

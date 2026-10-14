@@ -1,4 +1,4 @@
-import { AsyncHandler } from "../utils/asyncHandler.js";
+import { AsyncHandler } from "../utils/AsyncHandler.js";
 import { findExamScoreById, createExamScore, checkIfExamScoreExists, updatedExamScores, createAnalysis, getAllPredictionAnalysis,updateAnalysis } from "../models/prediction.model.js";
 import { findSubjectIdByCode } from "../models/subjects.model.js";
 import { analyzeStudentPerformance } from "../services/AiService.js";

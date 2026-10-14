@@ -1,4 +1,4 @@
-import { AsyncHandler } from "../utils/asyncHandler.js";
+import { AsyncHandler } from "../utils/AsyncHandler.js";
 import { ApiError } from "../utils/ApiError.js"
 import { HashPassword } from "../utils/HashPassword.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/generateTokens.js";
