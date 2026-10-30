@@ -3,7 +3,6 @@ import { Form } from "react-router-dom";
 import MainLogo from "../assets/Firefly_Gemini Flash_Design a premium minimal flat vector logo for an AI-powered academic assistant called 373158.png"
 import { useActionData, redirect } from "react-router-dom";
 import { createUser } from "../api";
-import React from "react";
 import { Mail, Lock, ArrowRight, User } from "lucide-react";
 
 

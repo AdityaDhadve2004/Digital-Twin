@@ -18,8 +18,7 @@ export async function loader() {
 export default function Dashboard() {
     const { revalidate } = useRevalidator();
     const { dashboardData, sgpaData } = useLoaderData();
-    console.log(dashboardData.data);
-    console.log(sgpaData.data);
+    console.log(dashboardData.data, sgpaData.data);
     let response;
     let answer;
     if (dashboardData.data) {

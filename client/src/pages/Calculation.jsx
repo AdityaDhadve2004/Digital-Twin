@@ -1,10 +1,7 @@
-import { useLoaderData, useRevalidator } from "react-router-dom"
-import { getAllSemesterSGPAFromDatabase, getAllSemesterSubjectsFromDatabase } from "../api"
+import { useLoaderData, useRevalidator } from "react-router-dom";
 import SemesterModal from "../component/SemesterModal";
 import { useState } from "react";
-import { deleteSubjectFromDatabase } from "../api";
-import { useNavigation } from "react-router-dom";
-import { getCGPAFromDatabase } from "../api";
+import { deleteSubjectFromDatabase,getCGPAFromDatabase,getAllSemesterSGPAFromDatabase,getAllSemesterSubjectsFromDatabase } from "../api";
 
 export async function loader() {
     const allSubjects = await getAllSemesterSubjectsFromDatabase();
@@ -30,10 +27,10 @@ export default function Calculation() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedSemester, setSelectedSemester] = useState(null);
     const [cgpa, setCGPA] = useState(null);
-    const onClose = () => setIsModalOpen(false);
     const data = useLoaderData();
     const allSemSGPAArr = data.allSemesterSGPA.data;
     const allSemSubjectsArr = data.allSubjects.data;
+    console.log(allSemSGPAArr, allSemSubjectsArr);  
     const semesterData = {};
 
     allSemSGPAArr.forEach((sgpaObj) => {

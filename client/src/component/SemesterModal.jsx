@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { Form, useNavigation, useRevalidator } from "react-router-dom";
-import { deleteSubjectFromDatabase } from "../api";
 const gradeClasses = {
   null: "text-grey-400 border-black-400/20 bg-black-400/5",
   s: "text-green-400 border-green-400/20 bg-green-400/5",
@@ -11,10 +10,7 @@ const gradeClasses = {
 };
 
 export default function SemesterModal({ isOpen, onClose, semester, onUpdateSubject, onDeleteSubject }) {
-
-  const { revalidate } = useRevalidator()
   const navigation = useNavigation();
-  const isSubmitting = navigation.state === "submitting";
   const [form, setForm] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -40,7 +36,7 @@ export default function SemesterModal({ isOpen, onClose, semester, onUpdateSubje
       return () => clearTimeout(t);
     } else {
       setVisible(false);
-      setCollapsed(false);
+      setCollapsed(false);  
     }
   }, [isOpen]);
 

@@ -41,8 +41,14 @@ const getAllSemesterSGPA = AsyncHandler(
             })
         }
         if (arr.length === 0) {
-            throw new ApiError(400, "No completed semesters with all grades")
-        }
+        return res.status(200).json(
+        new ApiResponse(
+            200,
+            [],
+            "No semester SGPA data available yet"
+        )
+    );
+}
         return res.status(200).json(
             new ApiResponse(200, arr, "All SGPA's calculated successfully")
         )

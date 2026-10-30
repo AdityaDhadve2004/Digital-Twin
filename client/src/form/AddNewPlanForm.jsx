@@ -1,5 +1,4 @@
 import { Form, useActionData } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { getAiPlanFromDatabase } from "../api";
 export async function actionPlan({ request }) {
     const formData = await request.formData();

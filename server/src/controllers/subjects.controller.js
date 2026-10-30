@@ -33,9 +33,15 @@ const getAllSubjects = AsyncHandler(
     async (req, res) => {
         const allSubjects = await getAllSubjectsModel(req.user.id);
 
-        if (!allSubjects) {
-            throw new ApiError(500, "Something went wrong while fetching all subjects data")
-        }
+       if (allSubjects.length === 0) {
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            [],
+            "No semester SGPA data available yet"
+        )
+    );
+}
 
         return res.status(201).json(
             new ApiResponse(201, allSubjects, "All subjects fetched successfully")

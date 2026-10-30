@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Form, useActionData, useNavigation } from "react-router-dom";
 import { getIA1Predictions, getAllIA1Predictions } from "../api";
 import { useLoaderData } from "react-router-dom";
-import PredictionRecents from "./PredictionRecents";
+import PredictionRecents from "../component/PredictionRecents";
 
 export async function loader() {
     const allIA1Analysis = await getAllIA1Predictions();
@@ -21,8 +21,8 @@ export default function IA1({
 }) {
     const actionData = useActionData();
     const ia1 = useLoaderData();
-    const [isFormDisable, setIsFormDisable] = useState(true);
     const [isSelectedPlan, setSelectedPlan] = useState(null);
+    const [isFormDisable, setIsFormDisable] = useState(true);
     const [open, setOpen] = useState(false);
     const contentRef = useRef(null);
     const [height, setHeight] = useState("0px");
@@ -30,6 +30,9 @@ export default function IA1({
     const navigation = useNavigation();
     const isSubmitting = navigation.state === "submitting";
 
+    useEffect(() => {
+        setIsFormDisable(!isFormDisable)
+    }, [actionData])
 
     useEffect(() => {
 
@@ -63,8 +66,9 @@ export default function IA1({
             <div className="col-span-8">
 
                 <div className="rounded-3xl border border-[#35312C] bg-[#24211D] shadow-[0_10px_30px_rgba(0,0,0,.18)] overflow-hidden">
-                
-                        <div>
+                   
+                    <div>
+                      {isFormDisable ? null : (
                             <button
                                 onClick={() => setOpen(!open)}
                                 className="w-full flex items-center justify-between px-8 py-6 border-b border-[#35312C] transition hover:bg-[#2B2823]"
@@ -99,7 +103,7 @@ export default function IA1({
                                     </svg>
                                 </div>
                             </button>
-
+                        )}
                             <div
                                 style={{
                                     height,
@@ -209,14 +213,14 @@ export default function IA1({
                                                     className="rounded-2xl border border-[#35312C] bg-[#2B2823] px-5 py-4 text-[#ECE7DF] outline-none transition-all duration-200 focus:border-[#D97757]"
                                                 >
                                                     <option value="">Select Grade</option>
-                                                    <option value="O">O (10)</option>
-                                                    <option value="A">A (9)</option>
-                                                    <option value="B">B (8)</option>
-                                                    <option value="C">C (7)</option>
-                                                    <option value="D">D (6)</option>
-                                                    <option value="E">E (5)</option>
-                                                    <option value="P">P (4)</option>
-                                                    <option value="F">F (0)</option>
+                                                    {["O (10)", "A (9)", "B (8)", "C (7)", "D (6)", "E (5)", "P (4)", "F (0)"].map((grade) => (
+                                                        <option
+                                                            key={grade}
+                                                            value={grade}
+                                                        >
+                                                            Select {grade}
+                                                        </option>
+                                                    ))}
                                                 </select>
                                             </div>
 
@@ -269,7 +273,7 @@ export default function IA1({
                     
 
                     {/* AI Analysis */}
-                    {isSelectedPlan?.data?.text && (
+                    {isSelectedPlan && (
                         <div className="mt-8 rounded-3xl border border-[#35312C] bg-[#24211D] shadow-[0_10px_30px_rgba(0,0,0,.18)] overflow-hidden">
 
                             <div className="border-b border-[#35312C] px-8 py-6">
@@ -362,7 +366,7 @@ export default function IA1({
 
                                     <div className="whitespace-pre-wrap leading-8 text-[15px] text-[#D5CEC5]">
 
-                                        {data.data.text}
+                                        {isSelectedPlan?.data?.text}
 
                                     </div>
 
@@ -374,7 +378,7 @@ export default function IA1({
 
                         </div>
                     )}
-
+                                                    
                 </div>
 
             </div>
@@ -395,7 +399,5 @@ export default function IA1({
 
         </div>
     );
-
-    /* ===================== END ===================== */
 
 };

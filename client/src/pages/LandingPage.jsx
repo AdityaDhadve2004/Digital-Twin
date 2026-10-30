@@ -1,48 +1,8 @@
 import MainLogo from "../assets/Firefly_Gemini Flash_Design a premium minimal flat vector logo for an AI-powered academic assistant called 373158.png"
 import { Link } from "react-router-dom";
-import React from "react";
 import {
   ArrowRight,
-  Brain,
-  TrendingUp,
-  Target,
-  BookOpen,
-  Award,
-  Users,
 } from "lucide-react";
-
-const features = [
-  {
-    icon: Brain,
-    title: "AI-Powered Insights",
-    description:
-      "Get personalized recommendations based on your learning patterns, strengths, and areas for improvement.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Progress Tracking",
-    description:
-      "Monitor your academic performance with detailed analytics and visual progress charts.",
-  },
-  {
-    icon: Target,
-    title: "Goal Setting",
-    description:
-      "Set SMART goals and receive guided action plans to achieve your academic milestones.",
-  },
-  {
-    icon: BookOpen,
-    title: "Personalized Study Plans",
-    description:
-      "Receive customized study schedules optimized for your learning style and course load.",
-  },
-  {
-    icon: Award,
-    title: "Skill Development",
-    description:
-      "Track both technical and soft skills, with recommendations for courses and certifications.",
-  },
-];
 
 export default function LandingPage() {
   return (

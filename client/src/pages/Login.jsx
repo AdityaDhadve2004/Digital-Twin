@@ -1,24 +1,18 @@
 import { Link } from "react-router-dom";
 import { Form } from "react-router-dom";
 import MainLogo from "../assets/Firefly_Gemini Flash_Design a premium minimal flat vector logo for an AI-powered academic assistant called 373158.png"
-import React from "react";
 import { Mail, Lock, ArrowRight } from "lucide-react";
 import { loginUser } from "../api";
-import { useActionData, redirect } from "react-router-dom";
+import { redirect } from "react-router-dom";
 export async function actionLogin({ request }) {
-  const formData = await request.formData()
-  console.log(formData);
+  const formData = await request.formData();
   const jsonData = Object.fromEntries(formData);
   const res = await loginUser(jsonData);
   if (res) {
-    return redirect("/dashboard");
-  }
+    return redirect("/dashboard");  }
 }
 
 export default function Login() {
-  const data = useActionData();
-  console.log(data);
-
   return (
     <div className="min-h-screen bg-[#1B1917] flex items-center justify-center px-6 py-12">
 

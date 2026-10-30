@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Form, useActionData, useNavigation } from "react-router-dom";
 import { getIA2Predictions, getAllIA2Predictions } from "../api";
 import { useLoaderData } from "react-router-dom";
-import PredictionRecents from "./PredictionRecents";
+import PredictionRecents from "../component/PredictionRecents";
 
 export async function loader() {
     const allIA2Analysis = await getAllIA2Predictions();
@@ -21,7 +21,8 @@ export default function IA2({
 }) {
     const data = useActionData();
     const ia2 = useLoaderData();
-    console.log(ia2)
+    console.log(ia2);
+    const [isSelectedPlan, setSelectedPlan] = useState(null);
     const [isFormDisable, setIsFormDisable] = useState(true);
     const [open, setOpen] = useState(false);
     const contentRef = useRef(null);
@@ -34,6 +35,15 @@ export default function IA2({
         setIsFormDisable(!isFormDisable)
     }, [data])
 
+    useEffect(() => {
+
+        if (data) {
+
+            setSelectedPlan(data.data);
+
+        }
+
+    }, [data]);
 
     useEffect(() => {
         if (!contentRef.current) return;
@@ -270,7 +280,7 @@ export default function IA2({
                     </div>
 
                     {/* AI Analysis */}
-                    {data?.data?.text && (
+                    {isSelectedPlan?.data?.text && (
                         <div className="mt-8 rounded-3xl border border-[#35312C] bg-[#24211D] shadow-[0_10px_30px_rgba(0,0,0,.18)] overflow-hidden">
 
                             <div className="border-b border-[#35312C] px-8 py-6">
@@ -363,7 +373,7 @@ export default function IA2({
 
                                     <div className="whitespace-pre-wrap leading-8 text-[15px] text-[#D5CEC5]">
 
-                                        {data.data.text}
+                                        {isSelectedPlan?.data?.text}
 
                                     </div>
 

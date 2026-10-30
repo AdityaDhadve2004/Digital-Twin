@@ -6,8 +6,8 @@ import Dashboard, { loader as userLoader } from "./pages/Dashboard"
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from "react-router-dom"
 import { actionSubject } from "./form/AddSubjectForm"
 import Calculation, { loader as subjectLoader } from "./pages/Calculation"
-import IA1, { loader as ia1Loader, actionIA1Prediction } from "./component/IA1"
-import IA2, { loader as ia2Loader, actionIA2Prediction } from "./component/IA2"
+import IA1, { loader as ia1Loader, actionIA1Prediction } from "./pages/IA1"
+import IA2, { loader as ia2Loader, actionIA2Prediction } from "./pages/IA2"
 import { actionPlan } from "./form/AddNewPlanForm"
 import PlanPage, { loader as planLoader } from "./pages/PlanPage"
 function App() {
@@ -22,8 +22,7 @@ function App() {
         <Route path="/dashboard/predictions/ia1" element={<IA1 />} loader={ia1Loader} action={actionIA1Prediction} />
         <Route path="/dashboard/predictions/ia2" element={<IA2 />} loader={ia2Loader} action={actionIA2Prediction} />
         <Route path="/dashboard/planner" element={<PlanPage />} action={actionPlan} loader={planLoader} />
-      /</Route>
-
+      </Route>
     </>
   ))
 
